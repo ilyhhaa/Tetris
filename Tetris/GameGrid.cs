@@ -65,6 +65,42 @@ namespace Tetris
             return true;
         }
 
+        private void ClearRow(int r)
+        {
+            for (int i = 0; i < Columns; i++)
+            {
+                grid[r, i] = 0;
+            }
+        }
+
+        private void MoveRowDown (int r, int numRows)
+        {
+            for (int i = 0; i < Columns; i++)
+            {
+                grid[r + numRows, i] = grid[r, i];
+                grid[r, i] = 0; 
+            }
+        }
+
+        public int ClearFullRows()
+        {
+            int cleared = 0;
+
+            for (int i = Rows-1; i>=0;i--)
+            {
+                if (isRowFull(i))
+                {
+                    ClearRow(i);
+                    cleared++;
+                }
+                else if (cleared > 0)
+                {
+                    MoveRowDown(i,cleared);
+                }
+            }
+            return cleared;
+        }
+
 
 
     }
