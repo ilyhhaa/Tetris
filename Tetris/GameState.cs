@@ -28,7 +28,37 @@ namespace Tetris
 
         public GameState()
         {
-                
+            GameGrid = new GameGrid(22, 10);
+            BlockQueue = new BlockQueue();
+            CurrentBlock = BlockQueue.GetAndUpdate();
+        }
+
+        private bool BlockFits()
+        {
+            foreach (Position p in CurrentBlock.TilePositions())
+            {
+                if (!GameGrid.IsEmpty(p.Row,p.Column))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void RotateBlockCW()
+        {
+            CurrentBlock.RotateCCW();
+
+            if (!BlockFits())
+            {
+                CurrentBlock.RotateCCW();
+            }
+        }
+
+        public void RotateBlockCCW()
+        {
+            CurrentBlock.RotateCCW();
+            if (BlockFits()) { CurrentBlock.RotateCCW(); }
         }
     }
 }
