@@ -58,7 +58,66 @@ namespace Tetris
         public void RotateBlockCCW()
         {
             CurrentBlock.RotateCCW();
-            if (BlockFits()) { CurrentBlock.RotateCCW(); }
+
+            if (!BlockFits())
+            {
+                CurrentBlock.RotateCCW();
+            }
         }
+
+        public void MoveBlockLeft()
+        {
+            CurrentBlock.Move(0, -1);
+            if (!BlockFits())
+            {
+                CurrentBlock.Move(0, 1);
+            }
+
+        }
+
+        public void MoveBlockRight()
+        {
+            CurrentBlock.Move(0, 1);
+
+            if (!BlockFits())
+            {
+                CurrentBlock.Move(0, -1);
+            }
+        }
+
+        private bool IsGameOver()
+        {
+            return !(GameGrid.isRowEmpty(0)&& GameGrid.isRowEmpty(1));
+        }
+
+        private void PlaceBlock()
+        {
+            foreach (Position p in CurrentBlock.TilePositions())
+            {
+                GameGrid[p.Row, p.Column] = CurrentBlock.id;
+            }
+            GameGrid.ClearFullRows();
+
+            if (IsGameOver())
+            {
+                GameOver = true;
+            }
+            else
+            {
+                CurrentBlock = BlockQueue.GetAndUpdate();
+            }
+        }
+
+        public void MoveBlockDown()
+        {
+            CurrentBlock.Move(1, 0);
+
+            if (!BlockFits())
+            {
+                CurrentBlock.Move(-1, 0);
+                PlaceBlock();
+            }
+        }
+        
     }
 }
